@@ -1,0 +1,58 @@
+1. python manage.py shell
+
+2. from news.models import User    
+user1 = User.objects.create_user('Aleksandr Ivanov')
+user2 = User.objects.create_user('Ivan Aleksandrov')
+
+3. from news.models import Author 
+Author.objects.create(user = user1) 
+Author.objects.create(user = user2) 
+
+4. from news.models import Category
+Category.objects.create(category_name = "sport")
+Category.objects.create(category_name = "politics")
+Category.objects.create(category_name = "education")
+Category.objects.create(category_name = "culture")   
+
+5. Post.objects.get(id = 1).categories.add(Category.objects.get(id = 1)) 
+   Post.objects.get(id = 1).categories.add(Category.objects.get(id = 4)) 
+
+6. from news.models import *
+Comment.objects.create(post = Post.objects.get(id = 1), user = Author.objects.get(id = 1).user, comment_text = "good")   
+Comment.objects.create(post = Post.objects.get(id = 2), user = Author.objects.get(id = 1).user, comment_text = "interesting")
+Comment.objects.create(post = Post.objects.get(id = 3), user = Author.objects.get(id = 2).user, comment_text = "awesome")
+Comment.objects.create(post = Post.objects.get(id = 1), user = Author.objects.get(id = 2).user, comment_text = "weird")   
+
+7. >>> Comment.objects.get(id = 1).like() 
+>>> Post.objects.get(id = 1).dislike()
+>>> Post.objects.get(id = 1).like()
+
+8. u1 = Author.objects.get(id=1)
+u1.update_rating()
+u1.user_rate
+
+u2 = Author.objects.get(id=2)
+>>> u2.author.comment_set.aggregate(comment_rating=Sum('comment_rate'))
+>>> u2.update_rating()
+>>> u2.user_rate
+
+9. >>> s = Author.objects.order_by('user_rate')
+>>> for i in s:
+...     i.user_rate
+...     i.author.username
+
+10. p = Post.objects.order_by('-post_rate')
+for i in p[:1]:
+...     i.date_time
+...     i.author.author
+...     i.post_rate
+...     i.heading
+...     i.preview()
+
+11. Post.objects.all().order_by('-post_rate')[0].comment_set.values(
+'date_time', 
+'user', 
+'comment_rate', 'comment_text'
+)
+
+
